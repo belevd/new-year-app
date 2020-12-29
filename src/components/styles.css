@@ -1,0 +1,64 @@
+.listOfDo {
+  list-style: none;
+  padding-left: 20px;
+}
+
+.list-item {
+  padding: 5x 5px;
+  margin: 5px 0;
+}
+
+.task__text_container {
+  display: inline-block;
+  width: 30%;
+}
+
+.task__text {
+}
+
+.task__input {
+}
+
+.task__text-completed {
+  text-decoration: line-through;
+}
+
+.button {
+  padding: 5px 10px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.button-remove {
+  background-color: red;
+  border-radius: 50%;
+  text-align: center;
+  margin: 5px;
+}
+
+.button-remove:hover,
+.button-remove:active {
+  background-color: rgb(247, 93, 93);
+}
+
+.button-completed {
+  background-color: rgb(80, 158, 80);
+  color: white;
+  margin: 5px;
+}
+
+.button-completed:hover,
+.button-completed:active {
+  background-color: rgb(107, 173, 107);
+}
+
+.button-addNewTask {
+  background-color: rgb(49, 187, 175);
+  color: #fff;
+}
+
+.button-addNewTask:hover,
+.button-addNewTask:active {
+  background-color: rgb(37, 148, 139);
+}
