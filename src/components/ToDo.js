@@ -3,10 +3,10 @@ import "./styles.css";
 import cn from "classnames";
 import {TaskDefaultValue} from '../App'
 
-export function ToDo ({ item, index, remove, complete, change, save, changingInput }) {
+export function ToDo ({ item, index }) {
   const [changing, setChanging] = useState(false);
   const input = useRef(null);
-  const defaultTask = useContext(TaskDefaultValue);
+  const {defaultTask, complete, change, save, changingInput, remove} = useContext(TaskDefaultValue)
 
   useEffect(() => {
     if (changing) {

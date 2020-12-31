@@ -86,15 +86,10 @@ function App() {
   return (
     <div className="content">
       <h1 className="mainTitle">Итоги 2020 года</h1>
-      <TaskDefaultValue.Provider value={DEFAULT_VALUE}>
+      <TaskDefaultValue.Provider value={{defaultInput: DEFAULT_VALUE, change, remove: removeToDo, complete, save: saveList, changingInput }}>
         <ToDoList
           list={listOfDo}
           addNew={addToDo}
-          remove={removeToDo}
-          complete={complete}
-          change={change}
-          save={saveList}
-          changingInput={changingInput}
         />
       </TaskDefaultValue.Provider>
     </div>

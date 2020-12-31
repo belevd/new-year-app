@@ -4,7 +4,7 @@ import "./styles.css";
 import cn from "classnames";
 
 export function ToDoList(props) {
-  const { list, addNew, remove, complete, change, save, changingInput } = props;
+  const { list, addNew } = props;
   return (
     <>
         <ul className="listOfDo">
@@ -15,11 +15,6 @@ export function ToDoList(props) {
                   key={index}
                   item={item}
                   index={index}
-                  remove={remove}
-                  complete={complete}
-                  change={change}
-                  save={save}
-                  changingInput={changingInput}
                 />
               );
             })
