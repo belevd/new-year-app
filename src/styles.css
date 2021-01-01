@@ -1,3 +1,21 @@
+.content {
+  padding: 30px 10%;
+  height: 100vh;
+  /* background-color: rgb(253, 231, 130); */
+}
+.section {
+  padding: 0 0 20px;
+}
+.mainTitle {
+  font-size: 32px;
+  font-weight: bold;
+  color: rgb(49, 187, 175);
+}
+.subTitle {
+  font-size: 24px;
+  font-weight: bold;
+  color: rgb(49, 187, 175);
+}
 .listOfDo {
   list-style: none;
   padding-left: 20px;
@@ -49,7 +67,7 @@
 .button-remove {
   width: 20px;
   height: 20px;
-  background: url("../assets/img/svg/close.svg") center/cover no-repeat;
+  background: url("./assets/img/svg/close.svg") center/cover no-repeat;
   border-radius: 50%;
   text-align: center;
   margin: 5px;
@@ -72,7 +90,7 @@
 }
 
 .button-completed {
-  background: url("../assets/img/svg/check.svg") center/cover no-repeat;
+  background: url("./assets/img/svg/check.svg") center/cover no-repeat;
   border: 2px solid #fff;
 }
 
@@ -85,3 +103,4 @@
 .button-addNewTask:active {
   background-color: rgb(37, 148, 139);
 }
+

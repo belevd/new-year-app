@@ -1,18 +1,17 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
-import "./styles.css";
+import React, { useState, useRef, useEffect } from "react";
 import cn from "classnames";
-import {TaskDefaultValue} from '../App'
+import { DEFAULT_TASK } from "../../constants";
 
-export function ToDo ({ item, index }) {
+export function ToDo(props) {
   const [changing, setChanging] = useState(false);
   const input = useRef(null);
-  const {defaultTask, complete, change, save, changingInput, remove} = useContext(TaskDefaultValue)
+  const { complete, change, save, changingInput, remove, item, index } = props;
 
   useEffect(() => {
     if (changing) {
       input.current.focus();
     }
-  }, [changing])
+  }, [changing]);
 
   const changeInput = (e) => {
     change(index, e.currentTarget.value);
@@ -21,7 +20,7 @@ export function ToDo ({ item, index }) {
   const textToInput = () => {
     changingInput();
     setChanging(true);
-  }
+  };
 
   const inputToText = () => {
     save();
@@ -31,13 +30,13 @@ export function ToDo ({ item, index }) {
 
   const completeTask = () => {
     complete(index);
-  }
+  };
 
   const deletePlaceholder = (e) => {
-    if (e.currentTarget.value === defaultTask) {
-      e.currentTarget.value = ''
+    if (e.currentTarget.value === DEFAULT_TASK) {
+      e.currentTarget.value = "";
     }
-  }
+  };
 
   return (
     <li className="list-item">
@@ -75,4 +74,4 @@ export function ToDo ({ item, index }) {
       ></button>
     </li>
   );
-};
+}
