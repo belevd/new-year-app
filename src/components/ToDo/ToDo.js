@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import cn from "classnames";
 import { DEFAULT_TASK } from "../../constants";
+import { Draggable } from "react-beautiful-dnd";
 
 export function ToDo(props) {
   const [changing, setChanging] = useState(false);
@@ -14,7 +15,7 @@ export function ToDo(props) {
   }, [changing]);
 
   const changeInput = (e) => {
-    change(index, e.currentTarget.value);
+    change(item.id, e.currentTarget.value);
   };
 
   const textToInput = () => {
@@ -29,7 +30,7 @@ export function ToDo(props) {
   };
 
   const completeTask = () => {
-    complete(index);
+    complete(item.id);
   };
 
   const deletePlaceholder = (e) => {
@@ -39,39 +40,48 @@ export function ToDo(props) {
   };
 
   return (
-    <li className="list-item">
-      <button
-        className={cn("button", "button-uncompleted", {
-          "button-completed": item.completed,
-        })}
-        onClick={completeTask}
-      ></button>
-      <div className="task__text_container">
-        {changing ? (
-          <input
-            ref={input}
-            value={item.text}
-            className={cn("task__input")}
-            placeholder="Введите текст задачи"
-            onBlur={inputToText}
-            onChange={changeInput}
-            onFocus={deletePlaceholder}
-          />
-        ) : (
-          <span
-            className={cn("task__text", {
-              "task__text-completed": item.completed,
+    <Draggable draggableId={item.id} index={index}>
+      {(provided) => (
+        <li
+          className="list-item"
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
+        >
+          <button
+            className={cn("button", "button-uncompleted", {
+              "button-completed": item.completed,
             })}
-            onClick={textToInput}
-          >
-            {item.text}
-          </span>
-        )}
-      </div>
-      <button
-        className={cn("button", "button-remove")}
-        onClick={() => remove(index)}
-      ></button>
-    </li>
+            onClick={completeTask}
+          ></button>
+          <div className="task__text_container">
+            {changing ? (
+              <input
+                ref={input}
+                value={item.text}
+                className={cn("task__input")}
+                placeholder="Введите текст задачи"
+                onBlur={inputToText}
+                onChange={changeInput}
+                onFocus={deletePlaceholder}
+              />
+            ) : (
+              <span
+                className={cn("task__text", {
+                  "task__text-completed": item.completed,
+                })}
+                onClick={textToInput}
+              >
+                {item.text}
+              </span>
+            )}
+          </div>
+          <button
+            className={cn("button", "button-remove")}
+            onClick={() => remove(item.id)}
+          ></button>
+        </li>
+      )}
+    </Draggable>
   );
 }

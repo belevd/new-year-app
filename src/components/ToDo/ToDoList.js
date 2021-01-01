@@ -2,93 +2,161 @@ import React, { useState, useEffect } from "react";
 import { ToDo } from "./ToDo";
 import cn from "classnames";
 import { DEFAULT_TASK, COMPLETED_TASKS } from "../../constants";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
-export function ToDoList(props) {
+export function ToDoList() {
   const [listOfDo, setListOfDo] = useState(
     JSON.parse(localStorage.getItem("listOfDo"))
       ? JSON.parse(localStorage.getItem("listOfDo"))
-      : []
+      : {
+          toDo: {},
+          toDoList: {
+            id: "toDoList",
+            title: "To Do List",
+            taskIds: [],
+          },
+        }
   );
   const [isChanging, setChanging] = useState(false);
+  const tasks = listOfDo.toDoList.taskIds.map((item) => listOfDo.toDo[item]);
 
   const changingInput = () => {
     setChanging(!isChanging);
   };
 
+  // Makes completed tasks from COMPLETED_TASKS list complete
   useEffect(() => {
+    const tasks = Object.keys(listOfDo.toDo);
     if (!isChanging) {
-      setListOfDo(
-        listOfDo.map((item) =>
-          COMPLETED_TASKS.includes(item.text)
-            ? { ...item, completed: true }
-            : { ...item }
-        )
-      );
+      const newTasks = tasks.reduce((acc, cur) => {
+        return COMPLETED_TASKS.includes(listOfDo.toDo[cur].text)
+          ? { ...acc, [cur]: { ...listOfDo.toDo[cur], completed: true } }
+          : { ...acc, [cur]: { ...listOfDo.toDo[cur] } };
+      }, {});
+      setListOfDo({ ...listOfDo, toDo: newTasks });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isChanging]);
 
-  const save = (list) => {
-    list
-      ? localStorage.setItem("listOfDo", JSON.stringify(list))
+  const save = (data) => {
+    data
+      ? localStorage.setItem("listOfDo", JSON.stringify(data))
       : localStorage.setItem("listOfDo", JSON.stringify(listOfDo));
   };
 
   const addToDo = () => {
+    const index = new Date().getTime();
     const newDo = {
+      id: `toDo-${index}`,
       text: DEFAULT_TASK,
       completed: false,
     };
-    setListOfDo([...listOfDo, newDo]);
+    const newList = {
+      ...listOfDo,
+      toDo: { ...listOfDo.toDo, [`toDo-${index}`]: newDo },
+      toDoList: {
+        ...listOfDo.toDoList,
+        taskIds: [...listOfDo.toDoList.taskIds, `toDo-${index}`],
+      },
+    };
+    save(newList);
+    setListOfDo(newList);
   };
 
   const complete = (id) => {
-    let newList = listOfDo.slice(0);
+    let newList = { ...listOfDo.toDo };
     if (COMPLETED_TASKS.includes(newList[id].text)) {
       newList[id].completed = true;
     } else {
       newList[id].completed = !newList[id].completed;
     }
-    setListOfDo(newList);
+    setListOfDo({ ...listOfDo, toDo: newList });
     save();
   };
 
   const change = (id, value) => {
-    let newList = listOfDo.slice(0);
+    let newList = { ...listOfDo.toDo };
     newList[id].text = value;
-    setListOfDo(newList);
+    setListOfDo({ ...listOfDo, toDo: newList });
   };
 
   const remove = (id) => {
-    save(listOfDo.filter((item, index) => index !== id));
-    setListOfDo(listOfDo.filter((item, index) => index !== id));
+    let newList = { ...listOfDo };
+    delete newList.toDo[id];
+    newList.toDoList.taskIds = newList.toDoList.taskIds.filter(
+      (item) => item !== id
+    );
+    save(newList);
+    setListOfDo(newList);
+  };
+
+  const onDragEnd = (result) => {
+    const { destination, source, draggableId } = result;
+
+    if (!destination) {
+      return;
+    }
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
+    const column = listOfDo.toDoList;
+    const newTaskIds = Array.from(column.taskIds);
+    newTaskIds.splice(source.index, 1);
+    newTaskIds.splice(destination.index, 0, draggableId);
+
+    const newColumn = {
+      ...column,
+      taskIds: newTaskIds,
+    };
+
+    const newState = { ...listOfDo, toDoList: newColumn };
+
+    save(newState);
+    setListOfDo(newState);
   };
 
   return (
     <>
-      <h2 className="subTitle">{`Список задач`}</h2>
-      <ul className="listOfDo">
-        {listOfDo.length ? (
-          listOfDo.map((item, index) => {
-            return (
-              <ToDo
-                key={index}
-                item={item}
-                index={index}
-                complete={complete}
-                change={change}
-                save={save}
-                changingInput={changingInput}
-                remove={remove}
-              />
-            );
-          })
-        ) : (
-          <span>У вас нет задач</span>
-        )}
-      </ul>
-      <button className={cn("button", "button-addNewTask")} onClick={addToDo}>
-        Добавить новую задачу
-      </button>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <h2 className="subTitle">{`Список задач`}</h2>
+        <Droppable droppableId="toDoList">
+          {(provided) => (
+            <ul
+              className="listOfDo"
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+            >
+              {tasks.length ? (
+                tasks.map((item, index) => {
+                  return (
+                    <ToDo
+                      key={item.id}
+                      item={item}
+                      index={index}
+                      complete={complete}
+                      change={change}
+                      save={save}
+                      changingInput={changingInput}
+                      remove={remove}
+                    />
+                  );
+                })
+              ) : (
+                <span>У вас нет задач</span>
+              )}
+              {provided.placeholder}
+            </ul>
+          )}
+        </Droppable>
+        <button className={cn("button", "button-addNewTask")} onClick={addToDo}>
+          Добавить новую задачу
+        </button>
+      </DragDropContext>
     </>
   );
 }
