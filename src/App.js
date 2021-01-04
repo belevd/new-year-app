@@ -1,5 +1,4 @@
 import React from "react";
-import "./styles.css";
 import { ToDoList } from "./components/ToDo/ToDoList";
 import { Income } from "./components/Income/Income";
 

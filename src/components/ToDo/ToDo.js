@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import cn from "classnames";
 import { DEFAULT_TASK } from "../../constants";
 import { Draggable } from "react-beautiful-dnd";
+import { Del } from "../../utils";
 
 export function ToDo(props) {
   const [changing, setChanging] = useState(false);
@@ -76,10 +77,7 @@ export function ToDo(props) {
               </span>
             )}
           </div>
-          <button
-            className={cn("button", "button-remove")}
-            onClick={() => remove(item.id)}
-          ></button>
+          <Del cb={() => remove(item.id)} />
         </li>
       )}
     </Draggable>

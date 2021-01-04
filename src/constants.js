@@ -14,3 +14,10 @@ export const MONTHES = [
   "Ноябрь",
   "Декабрь",
 ];
+export const INCOMES_TYPES_NAMES = {
+    'salary': 'Зарплата',
+    'subwork': 'Подработка',
+    'investments': 'Инвестиции',
+    'interests': 'Проценты',
+    'others': 'Прочие',
+}
