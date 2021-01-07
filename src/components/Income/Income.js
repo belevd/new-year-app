@@ -64,15 +64,16 @@ export function Income() {
     setIncomes(newIncomes);
   };
 
-  const changeIncome = (id, type, amount, date) => {
+  const changeIncome = (props) => {
+    const { id, type, amount, date } = props;
     let changingIncome = { ...incomes.list[id] };
     changingIncome = {
       ...changingIncome,
-      [type]: type,
-      [amount]: amount,
-      [date]: date,
+      type: type ? type : changingIncome.type,
+      amount: amount ? Number(amount) : changingIncome.amount,
+      date: date ? date : changingIncome.date,
     };
-    const newList = { ...incomes.list, id: changingIncome };
+    const newList = { ...incomes.list, [`${id}`]: changingIncome };
     const newIncomes = { ...incomes, list: newList };
     setIncomes(newIncomes);
   };

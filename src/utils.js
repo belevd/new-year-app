@@ -16,3 +16,10 @@ export const Del = (props) => {
     <button className={cn("button", "button-remove")} onClick={cb}></button>
   );
 };
+
+export const Change = (props) => {
+  const { cb } = props;
+  return (
+    <button className={cn("button", "button-change")} onClick={cb}></button>
+  );
+};

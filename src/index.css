@@ -98,9 +98,21 @@ code {
   margin: 5px;
 }
 
-/* .button-remove:hover, */
 .button-remove:active {
   background-color: rgb(247, 93, 93);
+}
+
+.button-change {
+  width: 20px;
+  height: 20px;
+  background: url("./assets/img/svg/pen.svg") center/cover no-repeat;
+  text-align: center;
+  margin: 5px;
+}
+
+.button-change:active {
+  border-radius: 50%;
+  background-color: rgb(140, 236, 116);
 }
 
 .button-uncompleted {
@@ -175,11 +187,19 @@ code {
 }
 
 .table__cell {
+  position: relative;
   text-align: center;
   padding: 5px 10px;
 }
 
+.table__cell .newIncome__container {
+  left: 0;
+  top: 0;
+  transform: translate(0, -50%);
+}
+
 .table__row {
+  position: relative;
   border-top: 1px solid grey;
 }
 thead .table__row {
