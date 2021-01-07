@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { IncomesTable } from "./IncomesTable";
 import { NewIncome } from "./NewIncome";
 import { useForm } from "react-hook-form";
+import cn from "classnames";
 
 export const IncomeContext = React.createContext();
 
@@ -31,7 +32,7 @@ export function Income() {
     const newIncome = {
       id,
       type,
-      amount,
+      amount: Number(amount),
       date: date ? date : new Date(),
     };
     const newIncomes = {
@@ -81,12 +82,16 @@ export function Income() {
       value={{ remove: deleteIncome, change: changeIncome }}
     >
       <h2 className="subTitle">{`Учет доходов`}</h2>
-      <button onClick={showNewIncomeModal}>{`Добавить новый доход`}</button>
+      <button
+        onClick={showNewIncomeModal}
+        className={cn("button", "button-primary")}
+      >{`Добавить новый доход`}</button>
       {newIncomeModal && (
         <NewIncome
           register={register}
           handleSubmit={handleSubmit(addIncome)}
           control={control}
+          close={closeNewIncomeModal}
         />
       )}
       <IncomesTable list={incomes.list} listIds={incomes.column.listIds} />

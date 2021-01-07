@@ -1,5 +1,6 @@
 import React from "react";
 import { IncomeItem } from "./IncomeItem";
+import cn from "classnames";
 
 export function IncomesTable(props) {
   const { list, listIds } = props;
@@ -8,13 +9,13 @@ export function IncomesTable(props) {
   return (
     <>
       {incomes.length ? (
-        <table>
+        <table className={cn("table", 'mt-20')}>
           <thead>
-            <tr>
-              <th>{`Дата`}</th>
-              <th>{`Источник дохода`}</th>
-              <th>{`Сумма`}</th>
-              <th></th>
+            <tr className="table__row">
+              <th className="table__cell">{`Дата`}</th>
+              <th className="table__cell">{`Источник дохода`}</th>
+              <th className="table__cell">{`Сумма`}</th>
+              <th className="table__cell"></th>
             </tr>
           </thead>
           <tbody>

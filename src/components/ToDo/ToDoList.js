@@ -3,6 +3,8 @@ import { ToDo } from "./ToDo";
 import cn from "classnames";
 import { DEFAULT_TASK, COMPLETED_TASKS } from "../../constants";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import "react-perfect-scrollbar/dist/css/styles.css";
 
 export function ToDoList() {
   const [listOfDo, setListOfDo] = useState(
@@ -35,7 +37,7 @@ export function ToDoList() {
       }, {});
       setListOfDo({ ...listOfDo, toDo: newTasks });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isChanging]);
 
   const save = (data) => {
@@ -126,34 +128,40 @@ export function ToDoList() {
         <h2 className="subTitle">{`Список задач`}</h2>
         <Droppable droppableId="toDoList">
           {(provided) => (
-            <ul
-              className="listOfDo"
-              ref={provided.innerRef}
-              {...provided.droppableProps}
+            <PerfectScrollbar
+              options={{ suppressScrollX: true }}
+              style={{width: '50%', marginBottom: '2em'}}
             >
-              {tasks.length ? (
-                tasks.map((item, index) => {
-                  return (
-                    <ToDo
-                      key={item.id}
-                      item={item}
-                      index={index}
-                      complete={complete}
-                      change={change}
-                      save={save}
-                      changingInput={changingInput}
-                      remove={remove}
-                    />
-                  );
-                })
-              ) : (
-                <span>У вас нет задач</span>
-              )}
-              {provided.placeholder}
-            </ul>
+              <ul
+                className="listOfDo"
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                {tasks.length ? (
+                  tasks.map((item, index) => {
+                    return (
+                      <ToDo
+                        key={item.id}
+                        item={item}
+                        index={index}
+                        complete={complete}
+                        change={change}
+                        save={save}
+                        changingInput={changingInput}
+                        remove={remove}
+                      />
+                    );
+                  })
+                ) : (
+                  <span>У вас нет задач</span>
+                )}
+
+                {provided.placeholder}
+              </ul>
+            </PerfectScrollbar>
           )}
         </Droppable>
-        <button className={cn("button", "button-addNewTask")} onClick={addToDo}>
+        <button className={cn("button", "button-primary")} onClick={addToDo}>
           Добавить новую задачу
         </button>
       </DragDropContext>
